@@ -28,3 +28,6 @@ npm install
   }
 },
 ```
+
+### Notice
+This module will get items from your Prime list only.
