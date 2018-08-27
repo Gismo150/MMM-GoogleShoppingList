@@ -1,0 +1,15 @@
+{
+  "name": "MMM-GoogleShoppingList",
+  "version": "1.0.0",
+  "description": "MagicMirror module for displaying Google Shoppinglist",
+  "license": "MIT",
+  "author": "eouia0819@gmail.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/eouia/MMM-GoogleShoppingList"
+  },
+  "dependencies": {
+    "fs-extra": "^7.0.0",
+    "puppeteer": "^1.7.0"
+  }
+}
