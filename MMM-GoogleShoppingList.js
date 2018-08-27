@@ -8,9 +8,19 @@ Module.register("MMM-GoogleShoppingList", {
       email: "",
       password: "",
     },
+    scanInterval: 1000*60,
+    displayImage: true,
+
+
+    // don't care about belows;
     useCookies: true,
-    debug:false, // don't set to true.
-    scanInterval: 1000*60
+    headless:true, // don't set to false.
+    itemPattern: "> (.*) <\/span>",
+    imagePattern: "src=\"(.*)\" srcset="
+  },
+
+  getStyles: function() {
+    return ["MMM-GoogleShoppingList.css"]
   },
 
   start: function() {
@@ -18,15 +28,47 @@ Module.register("MMM-GoogleShoppingList", {
   },
 
   getDom: function() {
-    var wrapper = document.createElement("div")
+    var wrapper = document.createElement("ul")
+    wrapper.id = "GSL_WRAPPER"
     return wrapper
   },
 
   socketNotificationReceived: function(noti, payload) {
     if (noti == "REFRESHED") {
-      console.log(payload)
+      this.drawItems(payload)
     }
   },
+
+  drawItems: function(items) {
+    var wrapper = document.getElementById("GSL_WRAPPER")
+    wrapper.innerHTML = ""
+    if (items.length > 0) {
+      items.forEach(item => {
+        var itemTitle = new RegExp(this.config.itemPattern).exec(item)
+
+
+
+        var d = document.createElement("li")
+        d.className = "GSL_ITEM"
+
+        if (this.config.displayImage) {
+          var itemImage = new RegExp(this.config.imagePattern).exec(item)
+          if (itemImage) {
+            var img = document.createElement("img")
+            img.src = itemImage[1]
+            d.appendChild(img)
+          }
+        }
+
+
+        var title = document.createElement("span")
+        title.innerHTML = itemTitle[1]
+        d.appendChild(title)
+        wrapper.appendChild(d)
+      })
+    }
+
+  }
 
 
 

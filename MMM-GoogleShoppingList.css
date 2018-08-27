@@ -1,0 +1,23 @@
+.GSL_ITEM {
+  list-style-type: circle;
+  line-height:100%;
+  font-size:20px;
+  border-radius: 4px;
+  padding:3px;
+  background-color:#666;
+  color:#FFF;
+  margin:2px;
+}
+
+.GSL_ITEM * {
+  vertical-align:middle;
+}
+
+.GSL_ITEM span {
+
+}
+
+.GSL_ITEM img {
+  /* display:none;*/
+  margin-right: 10px;
+}
