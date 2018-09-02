@@ -30,6 +30,10 @@ Module.register("MMM-GoogleShoppingList", {
   getDom: function() {
     var wrapper = document.createElement("ul")
     wrapper.id = "GSL_WRAPPER"
+    var loading = document.createElement("div")
+    loading.id = "GSL_LOADING"
+    loading.innerHTML = "loading..."
+    wrapper.appendChild(loading)
     return wrapper
   },
 
@@ -45,9 +49,6 @@ Module.register("MMM-GoogleShoppingList", {
     if (items.length > 0) {
       items.forEach(item => {
         var itemTitle = new RegExp(this.config.itemPattern).exec(item)
-
-
-
         var d = document.createElement("li")
         d.className = "GSL_ITEM"
 

@@ -13,7 +13,9 @@ module.exports = NodeHelper.create({
   getList: function() {
     var creds = this.config.creds
     this.emul(creds, {cookies:this.config.useCookies}).then(res => {
-      this.sendSocketNotification("REFRESHED", res)
+      if (res.length > 0) {
+        this.sendSocketNotification("REFRESHED", res)
+      }
     })
 
     var timer = setTimeout(()=>{
@@ -50,53 +52,59 @@ module.exports = NodeHelper.create({
     }
     async function get(headless) {
       const ERROR_CHECK = 'body > div > div.main.content.clearfix > div'
-      const USERNAME_SELECTOR = '#Email'
-      const EMAIL_NEXT_BUTTON = '#next'
-      const PASSWORD_SELECTOR = '#Passwd'
-      const PASSWORD_NEXT_BUTTON = '#signIn'
-      const SHOPPINGLIST_ITEMS = 'shopping-list-item'
 
       const browser = await puppeteer.launch({
-          headless: headless
+        headless: headless,
+	  	  executablePath: "/usr/bin/chromium-browser"
       })
       const page = await browser.newPage()
       await page.setUserAgent('Mozilla/5.0 (Macintosh Intel Mac OS X 10_13_3) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/65.0.3312.0 Safari/537.36') // Have to set this because some pages display differently for Headless Chrome
-
       if(options.cookies) {
         let loadedCookies = await loadCookies()
         if(creds.email in loadedCookies) {
           await page.setCookie(...loadedCookies[creds.email])
         }
       }
-
       await page.goto('https://shoppinglist.google.com', {waitUntil: 'networkidle2'})
-
       if (page.url().indexOf("https://shoppinglist.google.com/", 0) == -1) {
-        await page.click(USERNAME_SELECTOR)
+        console.log("[GSL] Trying to login")
+        //await page.click(USERNAME_SELECTOR)
+        await page.evaluate(() => {
+          document.querySelector("#Email").click()
+        })
         await page.keyboard.type(creds.email)
-        await page.click(EMAIL_NEXT_BUTTON)
+
+
+        //await page.click(EMAIL_NEXT_BUTTON)
+        await page.evaluate(() => {
+          document.querySelector("#next").click()
+        })
         await page.waitForNavigation()
         await page.keyboard.type(creds.password)
-        await page.click(PASSWORD_NEXT_BUTTON)
+
+        //await page.click(PASSWORD_NEXT_BUTTON)
+        await page.evaluate(() => {
+          document.querySelector("#signIn").click()
+        })
         await page.waitForNavigation({waitUntil: 'networkidle2'})
         if(options.cookies) {
           let cookies = await page.cookies()
           await saveCookies(creds.email, cookies)
+          console.log("[GSL] Cookies are saved.")
         }
       }
-
+      console.log("[GSL] Trying to get list")
       let list = await page.evaluate(selector => {
         console.log("selector", selector)
         let items = []
         let allItems = document.querySelectorAll(selector)
-
         allItems.forEach(res => items.push(res.innerHTML))
         return items
-      }, SHOPPINGLIST_ITEMS)
-
-       await browser.close()
+      }, "shopping-list-item")
 
        resolve(list)
+       await browser.close()
+       console.log("[GSL] Tried. (even failed)")
      }
 
      async function saveCookies(email, cookies) {
