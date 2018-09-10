@@ -8,15 +8,19 @@ Module.register("MMM-GoogleShoppingList", {
       email: "",
       password: "",
     },
-    scanInterval: 1000*60,
+    scanInterval: 1000*60*10,
     displayImage: true,
 
 
     // don't care about belows;
     useCookies: true,
-    headless:true, // don't set to false.
+    //headless:true, // don't set to false.
     itemPattern: "> (.*) <\/span>",
-    imagePattern: "src=\"(.*)\" srcset="
+    imagePattern: "src=\"(.*)\" srcset=",
+    browser: {
+      headless: true, // don't set to false.
+      executablePath: "/usr/bin/chromium-browser" //If you are using OSX or other system, remove this line or change.
+    }
   },
 
   getStyles: function() {

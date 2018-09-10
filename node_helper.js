@@ -48,15 +48,15 @@ module.exports = NodeHelper.create({
     } else if (!('password' in creds)) {
       reject(new Error('Password not supplied'))
     } else {
-      get(this.config.headless)
+      get(this.config.browser)
     }
-    async function get(headless) {
+    async function get(browserOption) {
+      function timeout(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+      }
       const ERROR_CHECK = 'body > div > div.main.content.clearfix > div'
 
-      const browser = await puppeteer.launch({
-        headless: headless,
-	  	  executablePath: "/usr/bin/chromium-browser"
-      })
+      const browser = await puppeteer.launch(browserOption)
       const page = await browser.newPage()
       await page.setUserAgent('Mozilla/5.0 (Macintosh Intel Mac OS X 10_13_3) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/65.0.3312.0 Safari/537.36') // Have to set this because some pages display differently for Headless Chrome
       if(options.cookies) {
@@ -65,7 +65,9 @@ module.exports = NodeHelper.create({
           await page.setCookie(...loadedCookies[creds.email])
         }
       }
-      await page.goto('https://shoppinglist.google.com', {waitUntil: 'networkidle2'})
+      //await page.goto('https://shoppinglist.google.com', {waitUntil: 'networkidle2'})
+      await page.goto('https://shoppinglist.google.com')
+      await timeout(5000)
       if (page.url().indexOf("https://shoppinglist.google.com/", 0) == -1) {
         console.log("[GSL] Trying to login")
         //await page.click(USERNAME_SELECTOR)
@@ -92,10 +94,10 @@ module.exports = NodeHelper.create({
           await saveCookies(creds.email, cookies)
           console.log("[GSL] Cookies are saved.")
         }
+        await timeout(5000)
       }
-      console.log("[GSL] Trying to get list")
+      console.log("[GSL] Landed on the target page. Trying to get list")
       let list = await page.evaluate(selector => {
-        console.log("selector", selector)
         let items = []
         let allItems = document.querySelectorAll(selector)
         allItems.forEach(res => items.push(res.innerHTML))
@@ -104,7 +106,7 @@ module.exports = NodeHelper.create({
 
        resolve(list)
        await browser.close()
-       console.log("[GSL] Tried. (even failed)")
+       console.log("[GSL] Tried. (when even failed) : ", list.length)
      }
 
      async function saveCookies(email, cookies) {
