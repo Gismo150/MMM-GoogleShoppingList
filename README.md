@@ -4,6 +4,11 @@ MagicMirror module for displaying Google Shoppinglist
 ## Screenshot
 ![screenshot](https://github.com/eouia/MMM-GoogleShoppingList/blob/master/screenshot.png?raw=true)
 
+## Version History
+### **1.0.1** (10th Sep, 2018)
+- fixed : Raspberry Pi puppeteer issue.
+- You should remove old version and re-install from `PreInstall` step.
+
 ## PreInstall
 ```shell
 sudo apt install chromium-browser
