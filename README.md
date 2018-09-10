@@ -1,5 +1,5 @@
 # MMM-GoogleShoppingList
-MagicMirror module for displaying Google Shoppinglist (Not complete yet.)
+MagicMirror module for displaying Google Shoppinglist
 
 ## Screenshot
 ![screenshot](https://github.com/eouia/MMM-GoogleShoppingList/blob/master/screenshot.png?raw=true)
