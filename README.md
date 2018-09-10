@@ -4,6 +4,11 @@ MagicMirror module for displaying Google Shoppinglist (Not complete yet.)
 ## Screenshot
 ![screenshot](https://github.com/eouia/MMM-GoogleShoppingList/blob/master/screenshot.png?raw=true)
 
+## PreInstall
+```shell
+sudo apt install chromium-browser
+```
+
 ## Install
 ```shell
 cd ~/MagicMirror/modules
