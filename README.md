@@ -1,5 +1,5 @@
 # MMM-GoogleShoppingList
-MagicMirror module for displaying Google Shoppinglist
+MagicMirror module for displaying Google Shoppinglist 
 
 ## Screenshot
 ![screenshot](https://github.com/eouia/MMM-GoogleShoppingList/blob/master/screenshot.png?raw=true)
@@ -40,4 +40,5 @@ npm install
 ```
 
 ### Notice
-This module will get items from your Prime list only.
+- This module will get items from your Prime list only.
+- 2-Factor-Authentication is not supported
