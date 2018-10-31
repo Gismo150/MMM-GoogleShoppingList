@@ -1,7 +1,8 @@
 'use strict'
 
-const puppeteer = require('puppeteer')
-const fs = require('fs-extra')
+const puppeteer = require("puppeteer")
+const fs = require("fs-extra")
+const path = require("path")
 
 var NodeHelper = require("node_helper")
 
@@ -112,7 +113,7 @@ module.exports = NodeHelper.create({
      async function saveCookies(email, cookies) {
        cookies = {[email]: cookies}
        try {
-         await fs.writeJson('./cookies.json', cookies)
+         await fs.writeJson(path.resolve(__dirname), "cookies.json", cookies)
          return
        } catch (err) {
          return new Error(err)
@@ -121,7 +122,7 @@ module.exports = NodeHelper.create({
 
      async function loadCookies() {
        try {
-         let cookies = await fs.readJson('./cookies.json')
+         let cookies = await fs.readJson(path.resolve(__dirname), "cookies.json")
          return cookies
         } catch (err) {
           return new Error(err)
