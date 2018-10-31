@@ -14,9 +14,6 @@ Module.register("MMM-GoogleShoppingList", {
 
     // don't care about belows;
     useCookies: true,
-    //headless:true, // don't set to false.
-    itemPattern: "> (.*) <\/span>",
-    imagePattern: "src=\"(.*)\" srcset=",
     browser: {
       headless: true, // don't set to false.
       executablePath: "/usr/bin/chromium-browser" //If you are using OSX or other system, remove this line or change.
@@ -52,29 +49,28 @@ Module.register("MMM-GoogleShoppingList", {
     wrapper.innerHTML = ""
     if (items.length > 0) {
       items.forEach(item => {
-        var itemTitle = new RegExp(this.config.itemPattern).exec(item)
         var d = document.createElement("li")
         d.className = "GSL_ITEM"
 
+        var v = document.createElement("div")
+        v.innerHTML = item
         if (this.config.displayImage) {
-          var itemImage = new RegExp(this.config.imagePattern).exec(item)
-          if (itemImage) {
+          var i = v.querySelector("img.itemImage")
+          if (i) {
             var img = document.createElement("img")
-            img.src = itemImage[1]
+
+            img.src = i.src
             d.appendChild(img)
           }
         }
-
-
+        var t = v.querySelector(".title").innerHTML
         var title = document.createElement("span")
-        title.innerHTML = itemTitle[1]
+        title.innerHTML = t
         d.appendChild(title)
+
         wrapper.appendChild(d)
       })
     }
 
   }
-
-
-
 })
