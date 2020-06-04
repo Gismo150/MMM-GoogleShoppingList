@@ -6,8 +6,8 @@ MagicMirror module for displaying Google Shoppinglist
 
 ## Version History
 ### **1.0.3** (4th June, 2020)
--Migration : From Puppeteer 1.15.0 to 2.0.0
--Fixed : Updating the button queryselector according to google's ne page layout.
+- Migration : From Puppeteer 1.15.0 to 2.0.0
+- Fixed : Updating the button queryselector according to google's ne page layout.
 ### **1.0.2** (31th Oct, 2018)
 - fixed : Some irregular parsing solved.
 ### **1.0.1** (10th Sep, 2018)
