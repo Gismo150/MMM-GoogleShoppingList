@@ -56,7 +56,8 @@ module.exports = NodeHelper.create({
         return new Promise(resolve => setTimeout(resolve, ms));
       }
       const ERROR_CHECK = 'body > div > div.main.content.clearfix > div'
-
+	
+	console.log("[GSL] Launching puppeteer browser")
       const browser = await puppeteer.launch(browserOption)
       const page = await browser.newPage()
       await page.setUserAgent('Mozilla/5.0 (Macintosh Intel Mac OS X 10_13_3) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/65.0.3312.0 Safari/537.36') // Have to set this because some pages display differently for Headless Chrome
@@ -66,9 +67,12 @@ module.exports = NodeHelper.create({
           await page.setCookie(...loadedCookies[creds.email])
         }
       }
-      //await page.goto('https://shoppinglist.google.com', {waitUntil: 'networkidle2'})
-      await page.goto('https://shoppinglist.google.com')
-      await timeout(5000)
+	console.log("[GSL] Goto Shoppinglist")
+      await page.goto('https://shoppinglist.google.com/', {
+	waitUntil: ['load', 'networkidle0'],
+	timeout: 0
+      }) // .catch((e) => {console.log("Catched Error: " + e)})
+  
       if (page.url().indexOf("https://shoppinglist.google.com/", 0) == -1) {
         console.log("[GSL] Trying to login")
         //await page.click(USERNAME_SELECTOR)
@@ -87,9 +91,9 @@ module.exports = NodeHelper.create({
 
         //await page.click(PASSWORD_NEXT_BUTTON)
         await page.evaluate(() => {
-          document.querySelector("#signIn").click()
+          document.querySelector("#submit").click()
         })
-        await page.waitForNavigation({waitUntil: 'networkidle2'})
+        await page.waitForNavigation({waitUntil: ['load', 'networkidle2']})
         if(options.cookies) {
           let cookies = await page.cookies()
           await saveCookies(creds.email, cookies)
@@ -99,6 +103,7 @@ module.exports = NodeHelper.create({
       }
       console.log("[GSL] Landed on the target page. Trying to get list")
       let list = await page.evaluate(selector => {
+        console.log(selector)
         let items = []
         let allItems = document.querySelectorAll(selector)
         allItems.forEach(res => items.push(res.innerHTML))

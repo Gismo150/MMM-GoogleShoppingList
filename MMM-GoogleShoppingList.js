@@ -15,7 +15,7 @@ Module.register("MMM-GoogleShoppingList", {
     // don't care about belows;
     useCookies: true,
     browser: {
-      headless: true, // don't set to false.
+      headless: true, // Set to false for debugging purposes (will start your chromium browser ui)
       executablePath: "/usr/bin/chromium-browser" //If you are using OSX or other system, remove this line or change.
     }
   },
